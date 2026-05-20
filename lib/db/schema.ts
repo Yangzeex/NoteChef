@@ -15,7 +15,7 @@ import { relations } from "drizzle-orm";
 // ─── Users ────────────────────────────────────────────────────────────────────
 
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(), // synced from Clerk
+  id: text("id").primaryKey(), // Clerk user ID, e.g. user_XXXX
   username: text("username").unique().notNull(),
   displayName: text("display_name"),
   avatarUrl: text("avatar_url"),
@@ -29,7 +29,7 @@ export const users = pgTable("users", {
 
 export const recipes = pgTable("recipes", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
@@ -93,7 +93,7 @@ export const steps = pgTable("steps", {
 
 export const cookbooks = pgTable("cookbooks", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
@@ -131,10 +131,10 @@ export const cookbookRecipes = pgTable(
 export const follows = pgTable(
   "follows",
   {
-    followerId: uuid("follower_id")
+    followerId: text("follower_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    followingId: uuid("following_id")
+    followingId: text("following_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -151,7 +151,7 @@ export const comments = pgTable("comments", {
   recipeId: uuid("recipe_id")
     .notNull()
     .references(() => recipes.id, { onDelete: "cascade" }),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   body: text("body").notNull(),
@@ -169,7 +169,7 @@ export const reactions = pgTable(
     recipeId: uuid("recipe_id")
       .notNull()
       .references(() => recipes.id, { onDelete: "cascade" }),
-    userId: uuid("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").notNull(), // like | love | fire
@@ -196,8 +196,8 @@ export const recipeStats = pgTable("recipe_stats", {
 
 export const feedItems = pgTable("feed_items", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").notNull(), // feed owner
-  actorId: uuid("actor_id")
+  userId: text("user_id").notNull(), // feed owner
+  actorId: text("actor_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   recipeId: uuid("recipe_id").references(() => recipes.id, {
@@ -212,10 +212,10 @@ export const feedItems = pgTable("feed_items", {
 
 export const notifications = pgTable("notifications", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  actorId: uuid("actor_id")
+  actorId: text("actor_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   type: text("type").notNull(), // new_follower | new_comment | new_reaction
