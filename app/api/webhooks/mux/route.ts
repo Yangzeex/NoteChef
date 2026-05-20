@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const body = await req.text();
 
   try {
-    Mux.Webhooks.verifySignature(body, Object.fromEntries(headerPayload), process.env.MUX_WEBHOOK_SECRET!);
+    mux.webhooks.verifySignature(body, Object.fromEntries(headerPayload), process.env.MUX_WEBHOOK_SECRET!);
   } catch {
     return new Response("Invalid signature", { status: 400 });
   }

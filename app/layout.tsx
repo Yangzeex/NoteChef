@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-sans",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "Notechef — Social Recipe Sharing",
@@ -13,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={geist.variable}>
+      <html lang="en" className={geistSans.variable}>
         <body className="font-sans antialiased">{children}</body>
       </html>
     </ClerkProvider>
