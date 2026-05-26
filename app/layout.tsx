@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TRPCProvider } from "@/lib/trpc/provider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -18,7 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en" className={geistSans.variable}>
-        <body className="font-sans antialiased">{children}</body>
+        <body className="font-sans antialiased">
+          <TRPCProvider>{children}</TRPCProvider>
+        </body>
       </html>
     </ClerkProvider>
   );
