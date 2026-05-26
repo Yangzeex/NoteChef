@@ -37,6 +37,8 @@ User records are synced from Clerk → Supabase via the webhook at `app/api/webh
 - `drizzle.config.ts` uses `DATABASE_URL_DIRECT` (session pooler, port 5432) for migrations; the app uses `DATABASE_URL` (transaction pooler, port 6543)
 - All schema changes: edit `schema.ts` then run `npm run db:push --force`
 
+**`users.id` is `text`, not `uuid`** — Clerk user IDs (`user_XXXX`) are not valid UUIDs. Every column that stores a Clerk user ID (`user_id`, `actor_id`, `follower_id`, `following_id`) is also `text`. Recipe/media/other entity PKs remain `uuid`.
+
 Key schema relationships: `recipes` → `media_items`, `ingredients`, `steps`, `recipe_stats` (denormalised counts). `feed_items` is a fan-out table keyed by `user_id` (feed owner). `recipe_stats` is updated via DB triggers (not application code).
 
 ### Media uploads
